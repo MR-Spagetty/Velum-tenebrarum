@@ -54,7 +54,7 @@ public class Tile {
         return this.neighbors[side];
     }
 
-    public void setNeighBour(int side, Tile neighbour) {
+    public void setNeighbour(int side, Tile neighbour) {
         if (constrain(side, 0, this.neighbors.length - 1) != side) {
             throw new IllegalArgumentException("Invalid side given");
         }
