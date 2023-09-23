@@ -3,14 +3,13 @@ public class Tile {
     public static final int RADIUS = 100;
     public static final int DIAMETER = 2 * RADIUS;
     public final PVector X_OFFSET = new PVector( -0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
-    public final PVector Y_OFFSET = new PVector( -1.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
-    public final PVector Z_OFFSET = new PVector( -sqrt(3) * RADIUS, 0);
+    public final PVector Y_OFFSET = new PVector( 0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
 
     /**
     * grid layout
     *   +y  +x
     *     /\
-    * +z |  | -z
+    *    |  |
     *     \/
     *   -x  -y
     */
@@ -23,7 +22,7 @@ public class Tile {
     private boolean isFinish = false;
 
     public Tile(int x, int y) {
-        this.pos = new PVector(x, y, -(x + y));
+        this.pos = new PVector(x, y);
     }
 
     public Tile(int x, int y, byte data) {
@@ -38,7 +37,6 @@ public class Tile {
     public void draw(PGraphics graphics, PVector origin) {
         PVector posToDraw = PVector.mult(X_OFFSET, this.pos.x);
         posToDraw.add(PVector.mult(Y_OFFSET, this.pos.y));
-        posToDraw.add(PVector.mult(Z_OFFSET, this.pos.z));
         posToDraw.add(origin);
         graphics.beginShape();
         float ang = radians(30);
