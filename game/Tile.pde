@@ -3,7 +3,7 @@ public class Tile {
     public static final int RADIUS = 100;
     public static final int DIAMETER = 2 * RADIUS;
     public final PVector X_OFFSET = new PVector( -0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
-    public final PVector Y_OFFSET = new PVector( 0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
+    public final PVector Y_OFFSET = new PVector(0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
 
     /**
     * grid layout
@@ -17,6 +17,7 @@ public class Tile {
     private PVector pos;
 
     private boolean[] openSides = new boolean[6];
+    private Tile[] neighbors = new Tile[6];
 
     private boolean isStart = false;
     private boolean isFinish = false;
@@ -44,6 +45,36 @@ public class Tile {
             graphics.vertex(posToDraw.x + RADIUS * cos(ang), posToDraw.y - RADIUS * sin(ang));
         }
         graphics.endShape(CLOSE);
+    }
+
+    public Tile getNeighbour(int side) {
+        if (constrain(side, 0, this.neighbors.length - 1) != side) {
+            throw new IllegalArgumentException("Invalid side given");
+        }
+        return this.neighbors[side];
+    }
+
+    public void setNeighBour(int side, Tile neighbour) {
+        if (constrain(side, 0, this.neighbors.length - 1) != side) {
+            throw new IllegalArgumentException("Invalid side given");
+        }
+        this.neighbors[side] = neighbour;
+    }
+
+    public Tile[] getNeighbors() {
+        Tile[] out = new Tile[this.neighbors.length];
+        for (int i = 0; i < this.neighbors.length; i++) {
+            out[i] = this.neighbors[i];
+        }
+        return out;
+    }
+
+    public boolean[] getOpenableSides() {
+        boolean[] out = new boolean[this.openSides.length];
+        for (int i = 0; i < this.openSides.length; i++) {
+            out[i] = !this.openSides[i] && (this.neighbors[i] != null);
+        }
+        return out;
     }
 
     public void setIsStart(boolean isStart) {
