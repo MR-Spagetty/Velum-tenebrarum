@@ -35,16 +35,28 @@ public class Tile {
         }
     }
 
+    public PVector getWorldCoords(PVector origin) {
+        PVector pos = PVector.mult(X_OFFSET, this.pos.x);
+        pos.add(PVector.mult(Y_OFFSET, this.pos.y));
+        pos.add(origin);
+        return pos;
+    }
+
     public void draw(PGraphics graphics, PVector origin) {
-        PVector posToDraw = PVector.mult(X_OFFSET, this.pos.x);
-        posToDraw.add(PVector.mult(Y_OFFSET, this.pos.y));
-        posToDraw.add(origin);
+        PVector posToDraw = getWorldCoords(origin);
         graphics.beginShape();
         float ang = radians(30);
         for (int point = 0; point < 6; point ++, ang += radians(60)) {
             graphics.vertex(posToDraw.x + RADIUS * cos(ang), posToDraw.y - RADIUS * sin(ang));
         }
         graphics.endShape(CLOSE);
+    }
+
+    public boolean pointIn(PVector point, PVector origin) {
+        PVector centre = getWorldCoords(origin);
+        float maxYOffset = RADIUS - (sin(radians(30)) * (abs(point.x - centre.x) / cos(radians(30))));
+        float maxXOffset = 0.5f * sqrt(3) * RADIUS;
+        return((abs(centre.x - point.x) <= maxXOffset) && (abs(centre.y - point.y) <= maxYOffset));
     }
 
     public Tile getNeighbour(int side) {
@@ -76,6 +88,7 @@ public class Tile {
         }
         return out;
     }
+
 
     public void setIsStart(boolean isStart) {
         this.isStart = isStart;
