@@ -7,7 +7,7 @@ public class Player {
 
     private PVector pos;
     private PVector origin;
-    private Tile currTile;
+    public Tile currTile;
     private float lookingDir = 0;
     private PVector velocity = new PVector();
 
@@ -42,12 +42,13 @@ public class Player {
         ArrayList<Tile> out = new ArrayList<>();
         Tile[] neighbourTiles = this.currTile.getNeighbors();
         for (int i = 0; i < neighbourTiles.length; i ++) {
-            if (this.currTile.isOpen(i)) {
+            if (this.currTile.isOpen(i) && (neighbourTiles[i] != null)) {
                 out.add(neighbourTiles[i]);
             }
         }
         return out;
     }
+
     private boolean movementValid(PVector movement) {
         if (this.currTile.pointIn(PVector.add(absoluteWorldPos(), movement), this.origin)) {
             return true;
@@ -58,6 +59,15 @@ public class Player {
             }
         }
         return false;
+    }
+
+    private void updateCurrTile() {
+        for (Tile tile: getAccessableTiles()) {
+            if (tile.pointIn(absoluteWorldPos(), this.origin)){
+                this.currTile = tile;
+                break;
+            }
+        }
     }
 
     public void step() {
@@ -80,10 +90,12 @@ public class Player {
         }
         if (movementValid(this.velocity)) {
             this.pos.add(this.velocity);
+            updateCurrTile();
         }
     }
 
     public void draw(PGraphics gfx) {
+        this.currTile.drawCoords();
         gfx.ellipseMode(CENTER);
         gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 5f, 5f);
         gfx.line(absoluteWorldPos().x, absoluteWorldPos().y, absoluteWorldPos().x + 10 * cos(this.lookingDir), absoluteWorldPos().y + 10 * sin(this.lookingDir));
