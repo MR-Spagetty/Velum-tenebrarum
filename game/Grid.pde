@@ -36,10 +36,10 @@ public class Grid {
             } else {
                 currExtData |= coordData & 0xf0;
             }
+            extraniusNibble ++;
             if (xCoord == 0) {
                 negative = false;
             }
-            println("xCoord: " + xCoord);
             int x = (negative ? - xCoord : xCoord);
             for (int y = max( -rad, -rad - x); y <= min(rad, rad - x); y++) {
                 char dataChar = data[byte_];
