@@ -38,7 +38,7 @@ public class Player {
             this.keysPressed.add(key);
         }
     }
-    private ArrayList<Tile> getAccessableTiles() {
+    public ArrayList<Tile> getAccessableTiles() {
         ArrayList<Tile> out = new ArrayList<>();
         Tile[] neighbourTiles = this.currTile.getNeighbors();
         for (int i = 0; i < neighbourTiles.length; i ++) {
