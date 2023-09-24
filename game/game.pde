@@ -17,6 +17,7 @@ void setup() {
     // grid.toFile("test.maze");
     player = new Player(grid.getTile(0, 0), origin);
     stroke(0);
+    fill(0);
     strokeWeight(3);
 }
 
@@ -58,7 +59,7 @@ void draw() {
     gfx.translate( -player.worldPos().x, -player.worldPos().y);
     gfx.clear();
     gfx.fill(255,0,0);
-    grid.getTile(0,0).draw(gfx, origin);
+    player.currTile.draw(gfx, origin);
     gfx.fill(0,255,0);
     // grid.getTile(0, 0).getNeighbour(side).draw(gfx, origin);
     for (Tile tile: player.getAccessableTiles()) {
