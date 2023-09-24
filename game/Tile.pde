@@ -30,7 +30,7 @@ public class Tile {
         this(x, y);
         setIsStart(((data >> 7) & 1) == 1);
         setIsFinish(((data >> 6) & 1) == 1);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i <= 5; i++) {
             setOpen(i,((data >> 5 - i) & 1) == 1);
         }
     }
