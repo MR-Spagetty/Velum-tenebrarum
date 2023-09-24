@@ -2,8 +2,8 @@ public class Tile {
 
     public static final int RADIUS = 100;
     public static final int DIAMETER = 2 * RADIUS;
-    public final PVector X_OFFSET = new PVector( -0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
-    public final PVector Y_OFFSET = new PVector(0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
+    public final PVector X_OFFSET = new PVector(0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
+    public final PVector Y_OFFSET = new PVector(-0.5f * sqrt(3) * RADIUS, -3f / 2 * RADIUS);
 
     /**
     * grid layout
@@ -26,7 +26,7 @@ public class Tile {
         this.pos = new PVector(x, y);
     }
 
-    public Tile(int x, int y, byte data) {
+    public Tile(int x, int y, char data) {
         this(x, y);
         setIsStart(((data >> 7) & 1) == 1);
         setIsFinish(((data >> 6) & 1) == 1);
@@ -71,6 +71,17 @@ public class Tile {
             throw new IllegalArgumentException("Invalid side given");
         }
         this.neighbors[side] = neighbour;
+    }
+
+    public PVector[] getNeighbouringCoords() {
+        PVector[] result = new PVector[this.neighbors.length];
+        result[0] = PVector.add(this.pos, new PVector(1, 0));
+        result[1] = PVector.add(this.pos, new PVector(0, 1));
+        result[2] = PVector.add(this.pos, new PVector(-1, 1));
+        result[3] = PVector.add(this.pos, new PVector(-1, 0));
+        result[4] = PVector.add(this.pos, new PVector(0, -1));
+        result[5] = PVector.add(this.pos, new PVector(1, -1));
+        return result;
     }
 
     public Tile[] getNeighbors() {
@@ -120,8 +131,8 @@ public class Tile {
         return this.openSides[side];
     }
 
-    public byte toByte() {
-        byte out = 0;
+    public char toChar() {
+        char out = 0;
         if (this.isStart) {
             out |= 0b10000000;
         }
