@@ -1,7 +1,7 @@
 public class Player {
 
     public final float maxRotationSpeed = radians(5);
-    public final float maxSpeed = 5f;
+    public final float maxSpeed = 1f;
     public final float visoinDist = 50f;
 
 
@@ -38,13 +38,34 @@ public class Player {
             this.keysPressed.add(key);
         }
     }
+    private ArrayList<Tile> getAccessableTiles() {
+        ArrayList<Tile> out = new ArrayList<>();
+        Tile[] neighbourTiles = this.currTile.getNeighbors();
+        for (int i = 0; i < neighbourTiles.length; i ++) {
+            if (this.currTile.isOpen(i)) {
+                out.add(neighbourTiles[i]);
+            }
+        }
+        return out;
+    }
+    private boolean movementValid(PVector movement) {
+        if (this.currTile.pointIn(PVector.add(absoluteWorldPos(), movement), this.origin)) {
+            return true;
+        }
+        for (Tile tile : getAccessableTiles()) {
+            if (tile.pointIn(PVector.add(absoluteWorldPos(), movement), this.origin)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void step() {
         if (this.keysPressed.contains('w') ^ this.keysPressed.contains('s')) {
             this.velocity.x = maxSpeed * cos(this.lookingDir);
             this.velocity.y = maxSpeed * sin(this.lookingDir);
             if (this.keysPressed.contains('s')) {
-                this.velocity.mult(-1);
+                this.velocity.mult( -1);
             }
         } else {
             this.velocity.x = 0;
@@ -57,12 +78,15 @@ public class Player {
                 this.lookingDir -= maxRotationSpeed;
             }
         }
-        this.pos.add(this.velocity);
+        if (movementValid(this.velocity)) {
+            this.pos.add(this.velocity);
+        }
     }
 
     public void draw(PGraphics gfx) {
         gfx.ellipseMode(CENTER);
-        gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 50f, 50f);
+        gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 5f, 5f);
+        gfx.line(absoluteWorldPos().x, absoluteWorldPos().y, absoluteWorldPos().x + 10 * cos(this.lookingDir), absoluteWorldPos().y + 10 * sin(this.lookingDir));
     }
 
 }
