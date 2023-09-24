@@ -146,4 +146,8 @@ public class Tile {
         }
         return out;
     }
+
+    public void drawCoords() {
+        text("x:" + this.pos.x + " y:" + this.pos.y, 20, 20);
+    }
 }
