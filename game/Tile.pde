@@ -42,14 +42,44 @@ public class Tile {
         return pos;
     }
 
-    public void draw(PGraphics graphics, PVector origin) {
-        PVector posToDraw = getWorldCoords(origin);
-        graphics.beginShape();
+    public PVector[] getCornerPositions(PVector orign) {
+        PVector[] corners = new PVector[6];
+        PVector worldCoords = getWorldCoords(origin);
         float ang = radians(30);
         for (int point = 0; point < 6; point ++, ang += radians(60)) {
-            graphics.vertex(posToDraw.x + RADIUS * cos(ang), posToDraw.y - RADIUS * sin(ang));
+            corners[point] = new PVector(worldCoords.x + RADIUS * cos(ang), worldCoords.y - RADIUS * sin(ang));
+        }
+        return corners;
+    }
+
+    public void draw(PGraphics graphics, PVector origin) {
+        graphics.beginShape();
+        for (PVector corner : getCornerPositions(origin)) {
+            graphics.vertex(corner.x, corner.y);
         }
         graphics.endShape(CLOSE);
+    }
+
+    public void drawCornerShadows(PGraphics gfx, PVector pPos, PVector origin) {
+        gfx.fill(0);
+        gfx.ellipseMode(CENTER);
+        for (PVector corner : getCornerPositions(origin)) {
+            PVector dark = PVector.sub(corner, pPos);
+            float a = min(dark.heading(), PVector.sub(corner, getWorldCoords(origin)).heading());
+            float b = max(dark.heading(), PVector.sub(corner, getWorldCoords(origin)).heading());
+            if (b > a + PI) {
+                if (pPos.y < this.getWorldCoords(origin).y){
+                    gfx.arc(round(corner.x), round(corner.y), DIAMETER, DIAMETER,
+                        b, PI/3 -a);
+                } else {
+                    gfx.arc(round(corner.x), round(corner.y), DIAMETER, DIAMETER,
+                        - TAU + b,a);
+                }
+            } else {
+                    gfx.arc(round(corner.x), round(corner.y), DIAMETER, DIAMETER,
+                       a, b);
+            }
+        }
     }
 
     public boolean pointIn(PVector point, PVector origin) {
@@ -87,7 +117,7 @@ public class Tile {
     public Tile[] getNeighbors() {
         Tile[] out = new Tile[this.neighbors.length];
         for (int i = 0; i < this.neighbors.length; i++) {
-            out[i] = this.neighbors[i];
+            out[i]= this.neighbors[i];
         }
         return out;
     }
@@ -95,7 +125,7 @@ public class Tile {
     public boolean[] getOpenableSides() {
         boolean[] out = new boolean[this.openSides.length];
         for (int i = 0; i < this.openSides.length; i++) {
-            out[i] = !this.openSides[i] && (this.neighbors[i] != null);
+            out[i]= !this.openSides[i] && (this.neighbors[i] != null);
         }
         return out;
     }

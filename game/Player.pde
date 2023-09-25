@@ -2,7 +2,7 @@ public class Player {
 
     public final float maxRotationSpeed = radians(5);
     public final float maxSpeed = 1f;
-    public final float visoinDist = 50f;
+    public final float visionDist = 50f;
 
 
     private PVector pos;
@@ -94,11 +94,18 @@ public class Player {
         }
     }
 
+    public void drawVision(PGraphics gfx) {
+        gfx.fill(255, 150);
+        gfx.ellipseMode(CENTER);
+        gfx.arc(absoluteWorldPos().x, absoluteWorldPos().y, visionDist * 2, visionDist * 2, this.lookingDir - radians(30), this.lookingDir + radians(30));
+        this.currTile.drawCornerShadows(gfx, absoluteWorldPos(), this.origin);
+    }
+
     public void draw(PGraphics gfx) {
         this.currTile.drawCoords();
+        gfx.fill(0, 0, 255);
         gfx.ellipseMode(CENTER);
         gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 5f, 5f);
         gfx.line(absoluteWorldPos().x, absoluteWorldPos().y, absoluteWorldPos().x + 10 * cos(this.lookingDir), absoluteWorldPos().y + 10 * sin(this.lookingDir));
     }
-
 }
