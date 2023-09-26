@@ -24,7 +24,7 @@ void setup() {
     gfx.noStroke();
     gfx.endDraw();
     generalView.beginDraw();
-    generalView.noStroke();
+    generalView.stroke(0);
     generalView.endDraw();
 }
 
