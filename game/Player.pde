@@ -38,11 +38,23 @@ public class Player {
             this.keysPressed.add(key);
         }
     }
+
     public ArrayList<Tile> getAccessableTiles() {
         ArrayList<Tile> out = new ArrayList<>();
         Tile[] neighbourTiles = this.currTile.getNeighbors();
         for (int i = 0; i < neighbourTiles.length; i ++) {
             if (this.currTile.isOpen(i) && (neighbourTiles[i] != null)) {
+                out.add(neighbourTiles[i]);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Tile> getInaccessableTiles() {
+        ArrayList<Tile> out = new ArrayList<>();
+        Tile[] neighbourTiles = this.currTile.getNeighbors();
+        for (int i = 0; i < neighbourTiles.length; i ++) {
+            if (!this.currTile.isOpen(i) && (neighbourTiles[i] != null)) {
                 out.add(neighbourTiles[i]);
             }
         }
@@ -95,7 +107,7 @@ public class Player {
     }
 
     public void drawVision(PGraphics gfx) {
-        gfx.fill(255, 150);
+        gfx.fill(255);
         gfx.ellipseMode(CENTER);
         gfx.arc(absoluteWorldPos().x, absoluteWorldPos().y, visionDist * 2, visionDist * 2, this.lookingDir - radians(30), this.lookingDir + radians(30));
         this.currTile.drawCornerShadows(gfx, absoluteWorldPos(), this.origin);
