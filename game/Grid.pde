@@ -1,10 +1,10 @@
 import java.util.ArrayDeque;
 public class Grid {
-    
+
     private HashMap<PVector, Tile> tiles = new HashMap<>();
     private final int rad;
     public final int numTiles;
-    
+
     public Grid(int rad) {
         this.rad = rad;
         this.numTiles = floor(2 * pow(rad + 1, 2) + pow(rad, 2) - (rad + 1));
@@ -15,7 +15,7 @@ public class Grid {
         }
         computeNeighbors(this.tiles.get(new PVector(0, 0)));
     }
-    
+
     public Grid(char[] data) {
         String extraniusData = "";
         char currExtData = 0;
@@ -51,7 +51,7 @@ public class Grid {
         println("Extranius data: \"" + extraniusData + "\"");
         computeNeighbors(this.tiles.get(new PVector(0, 0)));
     }
-    
+
     private void computeNeighbors(Tile tile) {
         Tile[] currNeighbors = tile.getNeighbors();
         PVector[] neighbouringCoords = tile.getNeighbouringCoords();
@@ -64,12 +64,19 @@ public class Grid {
                 }
             }
         }
+        currNeighbors = tile.getNeighbors();
+        for (int i = 0; i < currNeighbors.length; i++) {
+            if (currNeighbors[i] == null) {
+                tile.setNeighbour(i, new Tile(floor(neighbouringCoords[i].x), floor(neighbouringCoords[i].y)));
+            }
+        }
+
     }
-    
+
     public Tile getTile(int x, int y) {
         return this.tiles.get(new PVector(x,y));
     }
-    
+
     public void toFile(String fname) {
         PrintWriter w = createWriter(fname);
         for (int x = -rad; x <= rad; x++) {
@@ -81,5 +88,5 @@ public class Grid {
         w.flush();
         w.close();
     }
-    
+
 }
