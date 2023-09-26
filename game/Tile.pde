@@ -47,7 +47,7 @@ public class Tile {
         PVector worldCoords = getWorldCoords(origin);
         float ang = radians(30);
         for (int point = 0; point < 6; point ++, ang += radians(60)) {
-            corners[point] = new PVector(worldCoords.x + RADIUS * cos(ang), worldCoords.y - RADIUS * sin(ang));
+            corners[point] = new PVector(round(worldCoords.x + RADIUS * cos(ang)), round(worldCoords.y - RADIUS * sin(ang)));
         }
         return corners;
     }
