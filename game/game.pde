@@ -5,20 +5,27 @@ void settings() {
 Grid grid;
 PVector origin;
 PGraphics gfx;
+PGraphics generalView;
 Player player;
 int side = 0;
 void setup() {
     // noLoop();
     frameRate(60);
-    gfx = createGraphics(width, height, P2D);
     origin = new PVector(width / 2, height / 2);
     int rad = 1;
     grid = new Grid(readMazeFile("test.maze"));
-    // grid.toFile("test.maze");
     player = new Player(grid.getTile(0, 0), origin);
-    stroke(0);
+    stroke(255);
     fill(0);
     strokeWeight(3);
+    gfx = createGraphics(width, height, P2D);
+    generalView = createGraphics(width, height, P2D);
+    gfx.beginDraw();
+    gfx.noStroke();
+    gfx.endDraw();
+    generalView.beginDraw();
+    generalView.noStroke();
+    generalView.endDraw();
 }
 
 char[] readMazeFile(String fname) {
@@ -53,21 +60,28 @@ void draw() {
         side %= 6;
     }
     player.step();
-    background(255);
+    background(0);
     gfx.beginDraw();
     gfx.resetMatrix();
     gfx.translate( -player.worldPos().x, -player.worldPos().y);
-    gfx.clear();
-    gfx.fill(255,0,0);
+    gfx.background(255);
+    generalView.beginDraw();
+    generalView.resetMatrix();
+    generalView.translate( -player.worldPos().x, -player.worldPos().y);
+    generalView.background(0);
+    player.drawVision(generalView);
+    generalView.fill(0);
+    for (Tile tile: player.getInaccessableTiles()) {
+        tile.draw(generalView, origin);
+    }
+    generalView.endDraw();
+    gfx.mask(generalView);
+    gfx.fill(255, 20);
     player.currTile.draw(gfx, origin);
-    gfx.fill(0,255,0);
-    // grid.getTile(0, 0).getNeighbour(side).draw(gfx, origin);
     for (Tile tile: player.getAccessableTiles()) {
         tile.draw(gfx, origin);
     }
-    gfx.fill(0,0,255);
     player.draw(gfx);
     gfx.endDraw();
     image(gfx, 0, 0);
-    
 }
