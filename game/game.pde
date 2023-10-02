@@ -86,7 +86,6 @@ void keyPressed() {
                 currMenu = new Menu();
                 inMenu = false;
         }
-        println((char)keyCode);
     } else if (key == ESC) {
         inMenu = true;
     }
