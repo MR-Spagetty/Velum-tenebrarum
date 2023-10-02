@@ -6,15 +6,15 @@ Grid grid;
 PVector origin;
 PGraphics gfx;
 PGraphics generalView;
+Menu currMenu = new Menu(true);
 Player player;
 int side = 0;
+boolean inMenu = true;
 void setup() {
     // noLoop();
     frameRate(60);
     origin = new PVector(width / 2, height / 2);
     int rad = 1;
-    grid = new Grid(readMazeFile("test.maze"));
-    player = new Player(grid.getTile(0, 0), origin);
     stroke(255);
     fill(0);
     strokeWeight(3);
@@ -26,6 +26,28 @@ void setup() {
     generalView.beginDraw();
     generalView.stroke(0);
     generalView.endDraw();
+}
+
+void loadFile(File file) {
+    if (file == null) {
+        return;
+    }
+    char[] data = readMazeFile(file.getAbsolutePath());
+    if (data.length == 0) {
+        return;
+    }
+    grid = new Grid(data);
+    player = grid.createPlayer(origin);
+    inMenu = false;
+    currMenu = new Menu();
+}
+
+void saveFile(File file) {
+    if (file == null) {
+        return;
+    }
+    grid.toFile(file.getAbsolutePath());
+    inMenu = false;
 }
 
 char[] readMazeFile(String fname) {
@@ -47,14 +69,40 @@ char[] readMazeFile(String fname) {
 }
 
 void keyPressed() {
-    player.handleKey();
+    if (inMenu) {
+        switch(key) {
+            case ENTER:
+            case RETURN:
+            case ' ':
+                currMenu.execute();
+                break;
+            case 'w':
+                currMenu.up();
+                break;
+            case 's':
+                currMenu.down();
+                break;
+            case ESC:
+                currMenu = new Menu();
+                inMenu = false;
+        }
+        println((char)keyCode);
+    } else if (key == ESC) {
+        inMenu = true;
+    }
+    if (player != null) {
+        player.handleKey();
+    }
+    key = 0;
 }
 
 void keyReleased() {
-    player.handleKey(true);
+    if (player != null) {
+        player.handleKey(true);
+    }
 }
 
-void draw() {
+void play() {
     if (frameCount % 30 == 0) {
         side ++;
         side %= 6;
@@ -71,17 +119,30 @@ void draw() {
     generalView.background(0);
     player.drawVision(generalView);
     generalView.fill(0);
-    for (Tile tile: player.getInaccessableTiles()) {
+    for (Tile tile : player.getInaccessableTiles()) {
         tile.draw(generalView, origin);
     }
     generalView.endDraw();
     gfx.mask(generalView);
     gfx.fill(255, 20);
     player.currTile.draw(gfx, origin);
-    for (Tile tile: player.getAccessableTiles()) {
+    for (Tile tile : player.getAccessableTiles()) {
         tile.draw(gfx, origin);
     }
     player.draw(gfx);
     gfx.endDraw();
     image(gfx, 0, 0);
+}
+
+void menu() {
+    background(0);
+    currMenu.draw();
+}
+
+void draw() {
+    if (inMenu) {
+        menu();
+    } else {
+        play();
+    }
 }
