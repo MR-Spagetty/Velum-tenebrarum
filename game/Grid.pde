@@ -2,8 +2,9 @@ import java.util.ArrayDeque;
 public class Grid {
 
     private HashMap<PVector, Tile> tiles = new HashMap<>();
-    private final int rad;
+    public final int rad;
     public final int numTiles;
+    private Tile startTile;
 
     public Grid(int rad) {
         this.rad = rad;
@@ -45,6 +46,9 @@ public class Grid {
                 char dataChar = data[byte_];
                 byte_++;
                 Tile tile = new Tile(x, y, dataChar);
+                if (tile.isStart()){
+                    this.startTile = tile;
+                }
                 this.tiles.put(new PVector(x, y), tile);
             }
         }
@@ -67,7 +71,7 @@ public class Grid {
         currNeighbors = tile.getNeighbors();
         for (int i = 0; i < currNeighbors.length; i++) {
             if (currNeighbors[i] == null) {
-                tile.setNeighbour(i, new Tile(floor(neighbouringCoords[i].x), floor(neighbouringCoords[i].y)));
+                tile.setNeighbour(i, new Tile(floor(neighbouringCoords[i].x), floor(neighbouringCoords[i].y), true));
             }
         }
 
