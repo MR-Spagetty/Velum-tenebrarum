@@ -38,7 +38,7 @@ public class Menu {
     public void execute() {
         switch(options.get(currOpt)) {
             case "Resume" : inMenu = false;break;
-            case"New Maze" : println("NYI");break;
+            case"New Maze" : generateMaze();break;
             case"Load Maze" : selectInput("Load Maze", "loadFile");break;
             case"Save Maze" : selectOutput("Save Maze", "saveFile");break;
             case"Quit" : exit();break;

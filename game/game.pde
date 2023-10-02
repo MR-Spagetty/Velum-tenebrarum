@@ -50,6 +50,14 @@ void saveFile(File file) {
     inMenu = false;
 }
 
+void generateMaze() {
+    grid = new Grid(15);
+    MazeGenerator.generateMaze(grid);
+    inMenu = false;
+    currMenu = new Menu();
+    player = grid.createPlayer(origin);
+}
+
 char[] readMazeFile(String fname) {
     ArrayList<Character> out = new ArrayList<>();
     try{
