@@ -18,16 +18,21 @@ public class Tile {
 
     private boolean[] openSides = new boolean[6];
     private Tile[] neighbors = new Tile[6];
-
+    public final isDummy;
     private boolean isStart = false;
     private boolean isFinish = false;
 
     public Tile(int x, int y) {
+        this(x, y, false);
+    }
+
+    public Tile(int x, int y, boolean isDummy) {
+        this.isDummy = isDummy;
         this.pos = new PVector(x, y);
     }
 
     public Tile(int x, int y, char data) {
-        this(x, y);
+        this(x, y, false);
         setIsStart(((data >> 7) & 1) == 1);
         setIsFinish(((data >> 6) & 1) == 1);
         for (int i = 0; i <= 5; i++) {
@@ -125,7 +130,7 @@ public class Tile {
     public boolean[] getOpenableSides() {
         boolean[] out = new boolean[this.openSides.length];
         for (int i = 0; i < this.openSides.length; i++) {
-            out[i]= !this.openSides[i] && (this.neighbors[i] != null);
+            out[i]= !this.openSides[i] && (this.neighbors[i] != null) && !this.neighbors[i].isDummy;
         }
         return out;
     }
