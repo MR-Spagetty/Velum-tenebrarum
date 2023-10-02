@@ -47,6 +47,9 @@ public class Grid {
                 byte_++;
                 Tile tile = new Tile(x, y, dataChar);
                 if (tile.isStart()){
+                    if (this.startTile != null) {
+                        this.startTile.setIsStart(false);
+                    }
                     this.startTile = tile;
                 }
                 this.tiles.put(new PVector(x, y), tile);
@@ -91,6 +94,15 @@ public class Grid {
         }
         w.flush();
         w.close();
+    }
+
+    public void setStart(Tile startTile){
+        this.startTile = startTile;
+        startTile.setIsStart(true);
+    }
+
+    public Plyer createPlayer(PVector origin){
+        return new Player(this.startTile, origin);
     }
 
 }
