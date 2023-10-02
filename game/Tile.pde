@@ -166,6 +166,10 @@ public class Tile {
         return this.openSides[side];
     }
 
+    public int oppositeSide(int side){
+        return (side + 3) % 6;
+    }
+
     public char toChar() {
         char out = 0;
         if (this.isStart) {

@@ -1,4 +1,6 @@
-import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.List;
+
 public class Grid {
 
     private HashMap<PVector, Tile> tiles = new HashMap<>();
@@ -46,7 +48,7 @@ public class Grid {
                 char dataChar = data[byte_];
                 byte_++;
                 Tile tile = new Tile(x, y, dataChar);
-                if (tile.isStart()){
+                if (tile.isStart()) {
                     if (this.startTile != null) {
                         this.startTile.setIsStart(false);
                     }
@@ -84,6 +86,10 @@ public class Grid {
         return this.tiles.get(new PVector(x,y));
     }
 
+    public List<Tile> getTiles() {
+        return Collections.unmodifiableList(new ArrayList<Tile>(this.tiles.values()));
+    }
+
     public void toFile(String fname) {
         PrintWriter w = createWriter(fname);
         for (int x = -rad; x <= rad; x++) {
@@ -96,12 +102,16 @@ public class Grid {
         w.close();
     }
 
-    public void setStart(Tile startTile){
+    public void setStart(Tile startTile) {
         this.startTile = startTile;
         startTile.setIsStart(true);
     }
 
-    public Player createPlayer(PVector origin){
+    private Tile getStart() {
+        return this.startTile;
+    }
+
+    public Player createPlayer(PVector origin) {
         return new Player(this.startTile, origin);
     }
 
