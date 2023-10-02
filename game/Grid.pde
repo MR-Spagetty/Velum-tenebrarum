@@ -101,7 +101,7 @@ public class Grid {
         startTile.setIsStart(true);
     }
 
-    public Plyer createPlayer(PVector origin){
+    public Player createPlayer(PVector origin){
         return new Player(this.startTile, origin);
     }
 

@@ -18,7 +18,7 @@ public class Tile {
 
     private boolean[] openSides = new boolean[6];
     private Tile[] neighbors = new Tile[6];
-    public final isDummy;
+    public final boolean isDummy;
     private boolean isStart = false;
     private boolean isFinish = false;
 
