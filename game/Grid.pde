@@ -1,5 +1,7 @@
 import java.util.Collections;
 import java.util.List;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 
 public class Grid {
 
@@ -91,15 +93,22 @@ public class Grid {
     }
 
     public void toFile(String fname) {
-        PrintWriter w = createWriter(fname);
-        for (int x = -rad; x <= rad; x++) {
-            w.print((char)abs(x));
-            for (int y = max( -rad, -rad - x); y <= min(rad, rad - x); y++) {
-                w.print(getTile(x,y).toChar());
+        try {
+            FileOutputStream w = new FileOutputStream(fname);
+            println(this.tiles.values().size());
+            for (int x = -rad; x <= rad; x++) {
+                w.write((char)abs(x));
+                for (int y = max( -rad, -rad - x); y <= min(rad, rad - x); y++) {
+                    w.write(getTile(x,y).toChar());
+                }
             }
+            w.flush();
+            w.close();
+        } catch(FileNotFoundException e) {
+            println("Failed to open file for writing: " + e);
+        } catch(IOException e) {
+            println("Failed to write to file: " + e);
         }
-        w.flush();
-        w.close();
     }
 
     public void setStart(Tile startTile) {
