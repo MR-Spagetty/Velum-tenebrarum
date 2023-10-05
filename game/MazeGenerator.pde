@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.List;
 import java.util.HashSet;
+import java.util.ArrayDeque;
 
 public static class MazeGenerator {
 
@@ -9,9 +10,23 @@ public static class MazeGenerator {
         List<Tile> tiles = template.getTiles();
         template.setStart(tiles.get(rand.nextInt(tiles.size())));
         generateRoute(rand, template.getStart(), new HashSet<>());
+        int longestPathlength = 0;
+        Tile longestPathEnd = null;
+        for (Tile tile: tiles){
+          ArrayDeque<Tile> currPath = bfs(tile, template.getStart());
+          if (currPath == null){
+            continue;
+          }
+          int pathLength = currPath.size();
+          if (pathLength > longestPathlength){
+            longestPathlength = pathLength;
+            longestPathEnd = tile;
+          }
+        }
+        longestPathEnd.setIsFinish(true);
     }
 
-    public static void generateRoute(Random rand, Tile from, HashSet<Tile> visited) {
+    private static void generateRoute(Random rand, Tile from, HashSet<Tile> visited) {
         visited.add(from);
         if (!canExpand(from, visited)) {
             return;
@@ -35,6 +50,44 @@ public static class MazeGenerator {
             }
 
         }
+    }
+
+    public static ArrayDeque<Tile> bfs(Tile start, Tile end) {
+      ArrayDeque<Tile> queue = new ArrayDeque<>();
+      HashMap<Tile, Tile> visitedFrom = new HashMap<>();
+      visitedFrom.put(start, null);
+      queue.add(start);
+      while (!queue.isEmpty()){
+        Tile currTile = queue.poll();
+        for (int i = 0; i < 6; i++){
+          if (!currTile.isOpen(i)){
+            continue;
+          }
+          Tile neighbour = currTile.getNeighbour(i);
+          if (visitedFrom.containsKey(neighbour)){
+            continue;
+          }
+          queue.add(neighbour);
+          visitedFrom.put(neighbour, currTile);
+        }
+        if (visitedFrom.containsKey(end)) {
+          queue.clear();
+        }
+      }
+
+      if(!visitedFrom.containsKey(end)){
+        return null;
+      }
+
+      ArrayDeque<Tile> path = new ArrayDeque<>();
+      path.push(end);
+      Tile currTile = end;
+
+      while (currTile != start) {
+        currTile = visitedFrom.get(currTile);
+        path.push(currTile);
+      }
+      return path;
     }
 
     private static boolean canExpand(Tile from, HashSet<Tile> visited) {
