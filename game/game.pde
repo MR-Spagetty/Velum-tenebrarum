@@ -2,16 +2,16 @@ void settings() {
   size(1000, 1000, P2D);
   noSmooth();
 }
+
 Grid grid;
 PVector origin;
-PGraphics gfx;
-PGraphics generalView;
+PGraphics gfx, generalView;
 Menu currMenu = new Menu(true);
 Player player;
 int side = 0;
 boolean inMenu = true;
+
 void setup() {
-  // noLoop();
   frameRate(60);
   origin = new PVector(width / 2, height / 2);
   stroke(255);
@@ -78,6 +78,7 @@ char[] readMazeFile(String fname) {
 
 void keyPressed() {
   if (inMenu) {
+    // Process keys in the menu
     switch(key) {
     case ENTER:
     case RETURN:
@@ -91,10 +92,10 @@ void keyPressed() {
       currMenu.down();
       break;
     case ESC:
-      currMenu = new Menu();
-      inMenu = false;
+      inMenu = player == null;
     }
   } else if (key == ESC) {
+    // process ESC key when outside of menu
     inMenu = true;
   }
   if (player != null) {
@@ -111,6 +112,7 @@ void keyReleased() {
 
 void play() {
   background(0);
+  // Process the player reaching/being at the end
   if (player.currTile.isFinish()) {
     textAlign(CENTER);
     text("You win", width/2, height/2, width, height);
@@ -120,10 +122,12 @@ void play() {
     }
   }
   player.step();
+  // Drawing the background
   gfx.beginDraw();
   gfx.resetMatrix();
   gfx.translate( -player.worldPos().x, -player.worldPos().y);
   gfx.background(255);
+  // Drawing the vision mask
   generalView.beginDraw();
   generalView.resetMatrix();
   generalView.translate( -player.worldPos().x, -player.worldPos().y);
@@ -134,7 +138,9 @@ void play() {
     tile.draw(generalView, origin);
   }
   generalView.endDraw();
+  // apply the vision mask
   gfx.mask(generalView);
+  // aply temp movement representation
   gfx.fill(255, 20);
   player.currTile.draw(gfx, origin);
   for (Tile tile : player.getAccessableTiles()) {
@@ -142,6 +148,7 @@ void play() {
   }
   player.draw(gfx);
   gfx.endDraw();
+  // draw the visable stuff on the canvas
   image(gfx, 0, 0);
 }
 

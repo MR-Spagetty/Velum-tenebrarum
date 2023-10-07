@@ -116,7 +116,7 @@ public class Player {
     public void draw(PGraphics gfx) {
         gfx.fill(0, 0, 255);
         gfx.ellipseMode(CENTER);
-        gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 5f, 5f);
+        gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 10f, 10f);
         gfx.line(absoluteWorldPos().x, absoluteWorldPos().y, absoluteWorldPos().x + 10 * cos(this.lookingDir), absoluteWorldPos().y + 10 * sin(this.lookingDir));
     }
 }
