@@ -114,7 +114,6 @@ public class Player {
     }
 
     public void draw(PGraphics gfx) {
-        this.currTile.drawCoords();
         gfx.fill(0, 0, 255);
         gfx.ellipseMode(CENTER);
         gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 5f, 5f);
