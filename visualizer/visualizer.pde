@@ -162,15 +162,14 @@ void play() {
   scale(zoom);
   translate(1/zoom * width, 1/zoom * height);
   ArrayList<Tile> ends = new ArrayList<>();
+  stroke(0);
   for (Tile tile: grid.getTiles()){
     if (tile.isStart()){
       continue;
     } else if (tile.isFinish()){
       ends.add(tile);
-      stroke(0, 255, 0);
       fill(0,255,0);
     } else {
-      stroke(0);
       fill(255);
     }
     tile.draw(origin);
@@ -178,7 +177,6 @@ void play() {
   for (Tile end: ends){
     bfs(grid.getStart(), end);
   }
-  stroke(0, 0, 255);
   fill(0,0,255);
   grid.getStart().draw(origin);
   drawLinks();
