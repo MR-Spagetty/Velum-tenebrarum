@@ -89,10 +89,10 @@ void keyPressed() {
       case 'd':
         origin.x -= mov;
         break;
-      case 'q':
+      case 'e':
         zoom *=2;
         break;
-      case 'e':
+      case 'q':
         zoom /= 2;
         break;
     }
