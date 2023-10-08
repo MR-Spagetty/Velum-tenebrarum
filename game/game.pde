@@ -10,8 +10,10 @@ Menu currMenu = new Menu(true);
 Player player;
 int side = 0;
 boolean inMenu = true;
+PImage bgImage;
 
 void setup() {
+  bgImage = loadImage("background.png");
   frameRate(60);
   origin = new PVector(width / 2, height / 2);
   stroke(255);
@@ -126,7 +128,15 @@ void play() {
   gfx.beginDraw();
   gfx.resetMatrix();
   gfx.translate( -player.worldPos().x, -player.worldPos().y);
-  gfx.background(255);
+  // Draw background
+  int bgCentX = floor(player.absoluteWorldPos().x / bgImage.width);
+  int bgCentY = floor(player.absoluteWorldPos().y / bgImage.height);
+  for (int i = -4; i <= 4; i++){
+    for (int j = -4; j <= 4; j++){
+      gfx.image(bgImage, (bgCentX + i) * bgImage.width, (bgCentY + j) * bgImage.height);
+    }
+  }
+  //gfx.background(255);
   // Drawing the vision mask
   generalView.beginDraw();
   generalView.resetMatrix();
@@ -140,12 +150,6 @@ void play() {
   generalView.endDraw();
   // apply the vision mask
   gfx.mask(generalView);
-  // aply temp movement representation
-  gfx.fill(255, 20);
-  player.currTile.draw(gfx, origin);
-  for (Tile tile : player.getAccessableTiles()) {
-    tile.draw(gfx, origin);
-  }
   player.draw(gfx);
   gfx.endDraw();
   // draw the visable stuff on the canvas
