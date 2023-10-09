@@ -112,6 +112,15 @@ void keyReleased() {
   }
 }
 
+void reachEnd() {
+      player.currTile = new Tile(floor(player.currTile.pos.x), floor(player.currTile.pos.y), true);
+      player.currTile.setIsFinish(true);
+      for (int i = 0; i < 6; i++){
+        PVector[] coords = player.currTile.getNeighbouringCoords();
+        player.currTile.setNeighbour(i, new Tile(floor(coords[i].x), floor(coords[i].y), true));
+      }
+}
+
 void play() {
   background(0);
   // Process the player reaching/being at the end
@@ -119,8 +128,7 @@ void play() {
     textAlign(CENTER);
     text("You win", width/2, height/2, width, height);
     if (!player.currTile.isDummy){
-      player.currTile = new Tile(floor(player.currTile.pos.x), floor(player.currTile.pos.y), true);
-      player.currTile.setIsFinish(true);
+      reachEnd();
     }
   }
   player.step();
@@ -136,7 +144,6 @@ void play() {
       gfx.image(bgImage, (bgCentX + i) * bgImage.width, (bgCentY + j) * bgImage.height);
     }
   }
-  //gfx.background(255);
   // Drawing the vision mask
   generalView.beginDraw();
   generalView.resetMatrix();
