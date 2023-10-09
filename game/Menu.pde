@@ -65,7 +65,7 @@ public class Menu {
         generateMaze(15, true);
         return;
       }
-      generateMaze((this.currOpt + 1) * 3);
+      generateMaze(this.currOpt * 3);
       return;
     }
     switch(options.get(currOpt)) {
