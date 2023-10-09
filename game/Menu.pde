@@ -13,6 +13,7 @@ public class Menu {
   public Menu(int menuType) {
     this.menuType = menuType;
     if (menuType == 2) {
+      options.add("Back");
       options.add("3");
       options.add("6");
       options.add("9");
@@ -54,8 +55,12 @@ public class Menu {
     if (this.subMenu != null){
       this.subMenu.execute();
       this.subMenu = null;
+      return;
     }
     if (this.menuType == 2) {
+      if (this.currOpt == 0){
+        return;
+      }
       generateMaze((this.currOpt + 1) * 3);
       return;
     }
