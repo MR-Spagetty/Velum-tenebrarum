@@ -6,7 +6,7 @@ void settings() {
 Grid grid;
 PVector origin;
 PGraphics gfx, generalView;
-Menu currMenu = new Menu(true);
+Menu currMenu = new Menu(0);
 Player player;
 int side = 0;
 boolean inMenu = true;
@@ -40,7 +40,7 @@ void loadFile(File file) {
   grid = new Grid(data);
   player = grid.createPlayer(origin);
   inMenu = false;
-  currMenu = new Menu();
+  currMenu = new Menu(1);
 }
 
 void saveFile(File file) {
@@ -51,11 +51,11 @@ void saveFile(File file) {
   inMenu = false;
 }
 
-void generateMaze() {
-  grid = new Grid(15);
+void generateMaze(int rad) {
+  grid = new Grid(rad);
   MazeGenerator.generateMaze(grid);
   inMenu = false;
-  currMenu = new Menu();
+  currMenu = new Menu(1);
   player = grid.createPlayer(origin);
 }
 
@@ -94,7 +94,7 @@ void keyPressed() {
       currMenu.down();
       break;
     case ESC:
-      inMenu = player == null;
+      inMenu = currMenu.esc();
     }
   } else if (key == ESC) {
     // process ESC key when outside of menu
