@@ -11,6 +11,9 @@ public class Grid {
   private Tile startTile;
 
   public Grid(int rad) {
+    if (constrain(rad, 0, 15) != rad){
+      throw new IllegalArgumentException("Rad may not be less than 0 or greater than 15");
+    }
     this.rad = rad;
     this.numTiles = floor(2 * pow(rad + 1, 2) + pow(rad, 2) - (rad + 1));
     for (int x = -rad; x <= rad; x++) {
