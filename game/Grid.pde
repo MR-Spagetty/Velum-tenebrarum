@@ -12,7 +12,7 @@ public class Grid {
 
   public Grid(int rad) {
     if (constrain(rad, 0, 15) != rad){
-      throw new IllegalArgumentException("Rad may not be less than 0 or greater than 15");
+      throw new IllegalArgumentException("Rad may not be less than 0 or greater than 15\nyou gave: " + rad);
     }
     this.rad = rad;
     this.numTiles = floor(2 * pow(rad + 1, 2) + pow(rad, 2) - (rad + 1));
@@ -100,7 +100,7 @@ public class Grid {
   public void toFile(String fname) {
     try {
       FileOutputStream w = new FileOutputStream(fname);
-      println(this.tiles.values().size());
+      println("Writing " + this.tiles.values().size() + " tiles to file");
       for (int x = -rad; x <= rad; x++) {
         w.write((char)abs(x));
         for (int y = max( -rad, -rad - x); y <= min(rad, rad - x); y++) {
@@ -138,5 +138,15 @@ public class Grid {
       return new Player(getTile(0, 0), origin);
     }
     return new Player(this.startTile, origin);
+  }
+
+  public Player createPlayer(Player old) {
+    Player newPlay;
+    if (this.startTile == null) {
+      newPlay = new Player(getTile(0, 0), old);
+    } else {
+      newPlay = new Player(this.startTile, old);
+    }
+    return newPlay;
   }
 }

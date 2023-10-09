@@ -19,6 +19,7 @@ public class Menu {
       options.add("9");
       options.add("12");
       options.add("15");
+      options.add("Endless");
       return;
     }
     if (menuType == 1) {
@@ -59,6 +60,9 @@ public class Menu {
     }
     if (this.menuType == 2) {
       if (this.currOpt == 0){
+        return;
+      } else if (this.options.get(this.currOpt).equals("Endless")){
+        generateMaze(15, true);
         return;
       }
       generateMaze((this.currOpt + 1) * 3);

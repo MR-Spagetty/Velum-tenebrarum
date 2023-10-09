@@ -10,6 +10,7 @@ Menu currMenu = new Menu(0);
 Player player;
 int side = 0;
 boolean inMenu = true;
+boolean endless = false;
 PImage bgImage;
 
 void setup() {
@@ -51,7 +52,12 @@ void saveFile(File file) {
   inMenu = false;
 }
 
-void generateMaze(int rad) {
+void generateMaze(int rad){
+  generateMaze(rad, false);
+}
+
+void generateMaze(int rad, boolean isEndless) {
+  endless = isEndless;
   grid = new Grid(rad);
   MazeGenerator.generateMaze(grid);
   inMenu = false;
@@ -125,10 +131,16 @@ void play() {
   background(0);
   // Process the player reaching/being at the end
   if (player.currTile.isFinish()) {
-    textAlign(CENTER);
-    text("You win", width/2, height/2, width, height);
-    if (!player.currTile.isDummy){
-      reachEnd();
+    if (endless){
+      Player oldPlayer = player;
+      generateMaze(15, true);
+      player = grid.createPlayer(oldPlayer);
+    }else{
+      textAlign(CENTER);
+      text("You win", width/2, height/2, width, height);
+      if (!player.currTile.isDummy){
+        reachEnd();
+      }
     }
   }
   player.step();

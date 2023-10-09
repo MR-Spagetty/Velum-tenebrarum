@@ -6,7 +6,7 @@ public class Player {
 
 
     private PVector pos;
-    private PVector origin;
+    public PVector origin;
     public Tile currTile;
     private float lookingDir = 0;
     private PVector velocity = new PVector();
@@ -17,6 +17,13 @@ public class Player {
         this.origin = origin;
         this.pos = startTile.getWorldCoords(new PVector(0, 0));
         this.currTile = startTile;
+    }
+
+    public Player(Tile startTile, Player old){
+      this(startTile, old.origin);
+      this.pos.add(old.absoluteWorldPos()).sub(old.currTile.getWorldCoords(old.origin));
+      this.lookingDir = old.lookingDir;
+      this.keysPressed = old.keysPressed;
     }
 
     public PVector absoluteWorldPos() {
