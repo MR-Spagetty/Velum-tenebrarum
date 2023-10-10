@@ -1,6 +1,6 @@
 public class Player {
 
-  public final float maxRotationSpeed = radians(5);
+  public final float maxRotationSpeed = radians(3);
   public final float maxSpeed = 1f;
   public final float visionDist = 75f;
 
