@@ -11,10 +11,15 @@ Player player;
 int side = 0;
 boolean inMenu = true;
 boolean endless = false;
+
+// textures
 PImage bgImage;
+PImage playerImg;
 
 void setup() {
   bgImage = loadImage("background.png");
+  playerImg = loadImage("player.png");
+
   frameRate(60);
   origin = new PVector(width / 2, height / 2);
   stroke(255);

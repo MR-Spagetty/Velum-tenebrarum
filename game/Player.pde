@@ -13,7 +13,10 @@ public class Player {
 
   private ArrayList<Character> keysPressed = new ArrayList<>();
 
+  private PGraphics sprite;
+
   public Player(Tile startTile, PVector origin) {
+    this.sprite = createGraphics(64, 64, P2D);
     this.origin = origin;
     this.pos = startTile.getWorldCoords(new PVector(0, 0));
     this.currTile = startTile;
@@ -135,9 +138,21 @@ public class Player {
   }
 
   public void draw(PGraphics gfx) {
+    this.sprite.beginDraw();
+    this.sprite.clear();
+    this.sprite.imageMode(CENTER);
+    this.sprite.translate(sprite.width/2, sprite.height/2);
+    this.sprite.rotate(this.lookingDir + HALF_PI);
+    this.sprite.scale(0.75);
+    this.sprite.image(playerImg, 0, 0);
+    this.sprite.endDraw();
+
     gfx.fill(0, 0, 255);
     gfx.ellipseMode(CENTER);
     gfx.ellipse(absoluteWorldPos().x, absoluteWorldPos().y, 10f, 10f);
+    gfx.imageMode(CENTER);
+    gfx.image(sprite, absoluteWorldPos().x, absoluteWorldPos().y);
+
     gfx.line(absoluteWorldPos().x, absoluteWorldPos().y, absoluteWorldPos().x + 10 * cos(this.lookingDir), absoluteWorldPos().y + 10 * sin(this.lookingDir));
   }
 }
