@@ -1,5 +1,5 @@
 void settings() {
-  size(1000, 1000, P2D);
+  size(550, 550, P2D);
   noSmooth();
 }
 
@@ -22,7 +22,7 @@ void setup() {
 
   frameRate(60);
   origin = new PVector(width / 2, height / 2);
-  stroke(255);
+  noStroke();
   fill(0);
   strokeWeight(3);
   gfx = createGraphics(width, height, P2D);
@@ -132,6 +132,18 @@ void reachEnd() {
       }
 }
 
+void drawNoise(int offset){
+  noStroke();
+  int intensity = 150;
+  for (int x = 0; x <= width; x += 10){
+    for (int y = 0; y <= height; y += 10){
+      int value = round((noise(x, y  +offset) + 1)/2 * intensity);
+      fill(value, 10);
+      rect(x, y, 20, 20);
+    }
+  }
+}
+
 void play() {
   background(0);
   // Process the player reaching/being at the end
@@ -141,6 +153,7 @@ void play() {
       generateMaze(15, true);
       player = grid.createPlayer(oldPlayer);
     }else{
+      fill(255);
       textAlign(CENTER);
       text("You win", width/2, height/2, width, height);
       if (!player.currTile.isDummy){
@@ -178,6 +191,7 @@ void play() {
   gfx.endDraw();
   // draw the visable stuff on the canvas
   image(gfx, 0, 0);
+  drawNoise(frameCount/5);
 }
 
 void menu() {
